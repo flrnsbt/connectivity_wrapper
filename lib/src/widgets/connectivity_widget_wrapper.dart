@@ -35,10 +35,14 @@ class ConnectivityWidgetWrapper extends StatelessWidget {
   /// How to align the offline widget.
   final AlignmentGeometry? alignment;
 
+  final Widget Function(BuildContext context, bool isConnected, Widget child)?
+      builder;
+
   const ConnectivityWidgetWrapper({
     Key? key,
     required this.child,
     this.color,
+    this.builder,
     this.decoration,
     this.message,
     this.messageStyle,
@@ -93,7 +97,7 @@ class ConnectivityWidgetWrapper extends StatelessWidget {
     if (stacked) {
       return Stack(
         children: (<Widget>[
-          child,
+          builder?.call(context, !isOffline, child) ?? child,
           disableInteraction && isOffline
               ? Column(
                   children: <Widget>[
